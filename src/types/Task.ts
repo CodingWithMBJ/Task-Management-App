@@ -7,5 +7,6 @@ export type Task = {
   status: StatusProp;
   completed: boolean;
   important: boolean;
-  dueDate?: string; // ISO string
+  dueDate?: string;
+  // dueTime?: number;
 };

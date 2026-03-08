@@ -97,6 +97,7 @@ body {
 
 .main {
   padding: 0.8em 1em;
+  width: 100%;
 }
 
 /* =========================
@@ -134,7 +135,7 @@ body {
   width: 100%;
   height: 2px;
   background-color: var(--text-tertiary-alt);
-  transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .menu-btn:hover span {
@@ -166,7 +167,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 0 1em;
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.2s ease-in-out;
   z-index: 100;
 }
 
@@ -205,17 +206,13 @@ body {
 
 .task-items {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  gap: 18px;
-  align-items: stretch;
-
-  width: min(1200px, 95vw);
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, 500px);
+  grid-auto-rows: 250px;
+  grid-gap: 1.5em;
 }
 
 .task-box {
   width: 100%;
-  min-height: 250px;
   padding: 1.4rem;
   border-radius: 12px;
   background-color: var(--bg-tertiary);
@@ -229,6 +226,7 @@ body {
 .task-header {
   display: flex;
   flex-direction: column;
+  height: 100%;
   gap: 1rem;
   margin-bottom: 1rem;
   position: relative;
@@ -251,11 +249,16 @@ body {
   height: 30%;
 }
 
+.bottom {
+  display: flex;
+  justify-content: space-between;
+}
 .task-body-l {
   display: flex;
   flex-direction: column;
   align-items: start;
 }
+
 .task-completion {
   display: flex;
   justify-content: center;
@@ -332,6 +335,34 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.important {
+  color: var(--color-red-500);
+  transition: 0.5s ease-in-out;
+}
+
+.important:hover {
+  cursor: pointer;
+  animation: wiggle 0.7s ease-in-out;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(0);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
 }
 
 .task-status {
@@ -492,15 +523,31 @@ body {
   height: 38px;
   width: 38px;
   border-radius: 999px;
+  border: 2px solid var(--text-primary);
 
-  background: var(--bg-tertiary);
-  border: 1px solid var(--bg-primary);
+  background: var(--bg-alt);
+  border: 2px double var(--bg-tertiary-alt);
   color: var(--text-primary);
 
   cursor: pointer;
   transition:
     transform 0.12s ease,
     opacity 0.12s ease;
+}
+
+.theme-btn ion-icon {
+  font-size: 1.5em;
+}
+
+.light-theme .theme-btn ion-icon {
+  color: var(--color-amber-600);
+  font-weight: 800;
+  transition: 1s ease-in-out;
+}
+
+.light-theme .theme-btn ion-icon:hover {
+  transform: rotate(45deg);
+  transition: 1s ease-in-out;
 }
 
 .theme-btn:hover {

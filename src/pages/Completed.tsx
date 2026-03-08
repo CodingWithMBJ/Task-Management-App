@@ -1,8 +1,8 @@
-import { useTasksOutlet } from "../hooks/useTasksOutlet";
+import { useTaskContext } from "../context/TaskContext";
 
 const Completed: React.FC = () => {
-  const { tasks, toggleCompleteTask, deleteTask } = useTasksOutlet();
-  const completedTasks = tasks.filter((t) => t.completed);
+  const { tasks, toggleCompleted, deleteTask } = useTaskContext();
+  const completedTasks = tasks.filter((task) => task.completed);
 
   return (
     <section className="completed section">
@@ -16,10 +16,16 @@ const Completed: React.FC = () => {
             <input
               type="checkbox"
               checked={task.completed}
-              onChange={() => toggleCompleteTask(task.id)}
+              onChange={() => toggleCompleted(task.id)}
             />
+
             <span className="task-title task-title-done">{task.title}</span>
-            <button className="task-delete" onClick={() => deleteTask(task.id)}>
+
+            <button
+              type="button"
+              className="task-delete"
+              onClick={() => deleteTask(task.id)}
+            >
               🗑️
             </button>
           </div>

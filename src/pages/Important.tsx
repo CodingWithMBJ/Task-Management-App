@@ -1,10 +1,10 @@
-import { useTasksOutlet } from "../hooks/useTasksOutlet";
+import { useTaskContext } from "../context/TaskContext";
 
 const Important: React.FC = () => {
-  const { tasks, toggleCompleteTask, toggleImportantTask, deleteTask } =
-    useTasksOutlet();
+  const { tasks, toggleCompleted, toggleImportant, deleteTask } =
+    useTaskContext();
 
-  const importantTasks = tasks.filter((t) => t.important);
+  const importantTasks = tasks.filter((task) => task.important);
 
   return (
     <section className="important-task section">
@@ -18,8 +18,9 @@ const Important: React.FC = () => {
             <input
               type="checkbox"
               checked={task.completed}
-              onChange={() => toggleCompleteTask(task.id)}
+              onChange={() => toggleCompleted(task.id)}
             />
+
             <span
               className={
                 task.completed ? "task-title task-title-done" : "task-title"
@@ -31,13 +32,17 @@ const Important: React.FC = () => {
             <button
               type="button"
               className="task-icon-btn"
-              onClick={() => toggleImportantTask(task.id)}
+              onClick={() => toggleImportant(task.id)}
               title="Toggle important"
             >
               {task.important ? "⭐" : "☆"}
             </button>
 
-            <button className="task-delete" onClick={() => deleteTask(task.id)}>
+            <button
+              type="button"
+              className="task-delete"
+              onClick={() => deleteTask(task.id)}
+            >
               🗑️
             </button>
           </div>

@@ -6,9 +6,9 @@ const TaskList: Task[] = [
     title: "Learn Typescript",
     description: "Learning on CodingTemple",
     status: "New",
-    completed: false,
+    completed: true,
     important: true,
-    dueDate: "2026-04-20T00:00:00.000Z",
+    dueDate: "2025-01-15",
   },
   {
     id: 2,
@@ -17,16 +17,14 @@ const TaskList: Task[] = [
     status: "New",
     completed: false,
     important: true,
-    dueDate: "2026-04-20T00:00:00.000Z",
   },
   {
     id: 3,
     title: "Learn Typescript",
     description: "Learning on CodingTemple",
     status: "New",
-    completed: false,
-    important: true,
-    dueDate: "2026-04-20T00:00:00.000Z",
+    completed: true,
+    important: false,
   },
 ];
 

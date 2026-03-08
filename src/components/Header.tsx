@@ -20,7 +20,11 @@ const Header: React.FC<MenuBtnProps> = ({ handleMenuToggle }) => {
           aria-label="Toggle theme"
           title={isDark ? "Switch to light theme" : "Switch to dark theme"}
         >
-          {isDark ? "🌙" : "☀️"}
+          {isDark ? (
+            <ion-icon name="moon-outline"></ion-icon>
+          ) : (
+            <ion-icon name="sunny-outline"></ion-icon>
+          )}
         </button>
       </div>
     </header>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import type { Task, StatusProp } from "../types/Task";
 
 type AddTaskModalProps = {
@@ -6,10 +6,7 @@ type AddTaskModalProps = {
   closeModal: () => void;
 };
 
-const AddTaskModal: React.FC<AddTaskModalProps> = ({
-  onAddTask,
-  closeModal,
-}) => {
+const AddTaskModal = ({ onAddTask, closeModal }: AddTaskModalProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<StatusProp>("New");
@@ -18,19 +15,22 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
 
   const statusOptions: StatusProp[] = ["New", "In Progress", "Completed"];
 
-  const submit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const submit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (!title.trim()) return;
 
-    const dueDateIso =
-      dueDateLocal.trim() !== ""
-        ? new Date(dueDateLocal).toISOString()
-        : undefined;
+    const trimmedTitle = title.trim();
+    const trimmedDescription = description.trim();
+
+    if (!trimmedTitle) return;
+
+    const dueDateIso = dueDateLocal
+      ? new Date(dueDateLocal).toISOString()
+      : undefined;
 
     const newTask: Task = {
       id: Date.now(),
-      title: title.trim(),
-      description: description.trim(),
+      title: trimmedTitle,
+      description: trimmedDescription,
       status,
       completed: status === "Completed",
       important,
@@ -47,10 +47,13 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
       onClick={closeModal}
       role="dialog"
       aria-modal="true"
+      aria-labelledby="add-task-title"
     >
       <div className="modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3 className="modal-title">Add Task</h3>
+          <h3 id="add-task-title" className="modal-title">
+            Add Task
+          </h3>
 
           <button
             type="button"
@@ -64,19 +67,27 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
 
         <form className="modal-form" onSubmit={submit}>
           <div className="modal-field">
-            <label className="modal-label">Title</label>
+            <label className="modal-label" htmlFor="task-title">
+              Title
+            </label>
             <input
+              id="task-title"
+              type="text"
               className="modal-input"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Task title"
               autoFocus
+              required
             />
           </div>
 
           <div className="modal-field">
-            <label className="modal-label">Description</label>
+            <label className="modal-label" htmlFor="task-description">
+              Description
+            </label>
             <textarea
+              id="task-description"
               className="modal-textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -86,10 +97,13 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
           </div>
 
           <div className="modal-field">
-            <label className="modal-label">Due date (optional)</label>
+            <label className="modal-label" htmlFor="task-due-date">
+              Due date (optional)
+            </label>
 
             <div className="modal-inline">
               <input
+                id="task-due-date"
                 type="datetime-local"
                 className="modal-input"
                 value={dueDateLocal}
@@ -115,8 +129,11 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
           </div>
 
           <div className="modal-field">
-            <label className="modal-label">Status</label>
+            <label className="modal-label" htmlFor="task-status">
+              Status
+            </label>
             <select
+              id="task-status"
               className="modal-select"
               value={status}
               onChange={(e) => setStatus(e.target.value as StatusProp)}
