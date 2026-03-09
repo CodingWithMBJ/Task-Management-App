@@ -9,6 +9,7 @@ const TaskList: Task[] = [
     completed: true,
     important: true,
     dueDate: "2025-01-15",
+    dueTime: "10:00 PM",
   },
   {
     id: 2,
@@ -17,6 +18,8 @@ const TaskList: Task[] = [
     status: "New",
     completed: false,
     important: true,
+    dueDate: "2025-01-15",
+    dueTime: "10:00 PM",
   },
   {
     id: 3,
@@ -25,6 +28,8 @@ const TaskList: Task[] = [
     status: "New",
     completed: true,
     important: false,
+    dueDate: "2025-01-15",
+    dueTime: "10:00 PM",
   },
 ];
 

@@ -8,5 +8,5 @@ export type Task = {
   completed: boolean;
   important: boolean;
   dueDate?: string;
-  // dueTime?: number;
+  dueTime?: string;
 };

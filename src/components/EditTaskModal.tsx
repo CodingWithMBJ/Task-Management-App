@@ -1,21 +1,10 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import type { Task, StatusProp } from "../types/Task";
 
 type EditTaskModalProps = {
   task: Task;
   onEditTask: (task: Task) => void;
   closeModal: () => void;
-};
-
-const formatLocalDateTime = (dateString?: string): string => {
-  if (!dateString) return "";
-
-  const d = new Date(dateString);
-  const pad = (n: number) => String(n).padStart(2, "0");
-
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(
-    d.getDate(),
-  )}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
 const EditTaskModal = ({
@@ -27,11 +16,11 @@ const EditTaskModal = ({
   const [description, setDescription] = useState(task.description ?? "");
   const [status, setStatus] = useState<StatusProp>(task.status);
   const [important, setImportant] = useState(task.important);
-  const [dueDateLocal, setDueDateLocal] = useState(
-    formatLocalDateTime(task.dueDate),
-  );
+  const [dueDateLocal, setDueDateLocal] = useState(task.dueDate ?? "");
+  const [dueTimeLocal, setDueTimeLocal] = useState(task.dueTime ?? "");
 
   const statusOptions: StatusProp[] = ["New", "In Progress", "Completed"];
+  const timeRef = useRef<HTMLInputElement>(null);
 
   const submit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -41,18 +30,15 @@ const EditTaskModal = ({
 
     if (!trimmedTitle) return;
 
-    const dueDateIso = dueDateLocal
-      ? new Date(dueDateLocal).toISOString()
-      : undefined;
-
     const updatedTask: Task = {
       ...task,
       title: trimmedTitle,
       description: trimmedDescription,
       status,
-      important,
-      dueDate: dueDateIso,
       completed: status === "Completed",
+      important,
+      dueDate: dueDateLocal || undefined,
+      dueTime: dueTimeLocal || undefined,
     };
 
     onEditTask(updatedTask);
@@ -125,7 +111,7 @@ const EditTaskModal = ({
             <div className="modal-inline">
               <input
                 id="edit-task-due-date"
-                type="datetime-local"
+                type="date"
                 className="modal-input"
                 value={dueDateLocal}
                 onChange={(e) => setDueDateLocal(e.target.value)}
@@ -144,8 +130,39 @@ const EditTaskModal = ({
 
             {dueDateLocal && (
               <small className="modal-help">
-                Due: {new Date(dueDateLocal).toLocaleString()}
+                Due date: {new Date(dueDateLocal).toLocaleDateString()}
               </small>
+            )}
+          </div>
+
+          <div className="modal-field">
+            <label className="modal-label" htmlFor="edit-task-due-time">
+              Due time (optional)
+            </label>
+
+            <div className="modal-inline">
+              <input
+                ref={timeRef}
+                id="edit-task-due-time"
+                type="time"
+                className="modal-input"
+                value={dueTimeLocal}
+                onChange={(e) => setDueTimeLocal(e.target.value)}
+              />
+
+              <button
+                type="button"
+                className="modal-btn"
+                onClick={() => setDueTimeLocal("")}
+                disabled={!dueTimeLocal}
+                title="Clear due time"
+              >
+                Clear
+              </button>
+            </div>
+
+            {dueTimeLocal && (
+              <small className="modal-help">Due time: {dueTimeLocal}</small>
             )}
           </div>
 

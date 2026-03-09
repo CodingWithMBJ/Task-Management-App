@@ -2,6 +2,7 @@ import type React from "react";
 import MenuBtn from "./MenuBtn";
 import type { MenuBtnProps } from "../types/Menu";
 import { useTheme } from "../hooks/useTheme";
+import User from "./User";
 
 const Header: React.FC<MenuBtnProps> = ({ handleMenuToggle }) => {
   const { isDark, toggleTheme } = useTheme();
@@ -13,7 +14,7 @@ const Header: React.FC<MenuBtnProps> = ({ handleMenuToggle }) => {
     <header className="header">
       <MenuBtn handleMenuToggle={handleMenuToggle} />
 
-      <div className="profile">P</div>
+      <User />
 
       <div className="header-actions">
         <button

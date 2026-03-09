@@ -5,7 +5,7 @@ export const useScreenSize = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
+      setIsDesktop(window.innerWidth >= 1200);
     };
 
     handleResize();

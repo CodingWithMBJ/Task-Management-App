@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import type { Task, StatusProp } from "../types/Task";
 
 type AddTaskModalProps = {
@@ -12,6 +12,7 @@ const AddTaskModal = ({ onAddTask, closeModal }: AddTaskModalProps) => {
   const [status, setStatus] = useState<StatusProp>("New");
   const [important, setImportant] = useState(false);
   const [dueDateLocal, setDueDateLocal] = useState("");
+  const [dueTimeLocal, setDueTimeLocal] = useState("");
 
   const statusOptions: StatusProp[] = ["New", "In Progress", "Completed"];
 
@@ -23,9 +24,8 @@ const AddTaskModal = ({ onAddTask, closeModal }: AddTaskModalProps) => {
 
     if (!trimmedTitle) return;
 
-    const dueDateIso = dueDateLocal
-      ? new Date(dueDateLocal).toISOString()
-      : undefined;
+    const dueDate = dueDateLocal || undefined;
+    const dueTime = dueTimeLocal || undefined;
 
     const newTask: Task = {
       id: Date.now(),
@@ -34,12 +34,15 @@ const AddTaskModal = ({ onAddTask, closeModal }: AddTaskModalProps) => {
       status,
       completed: status === "Completed",
       important,
-      dueDate: dueDateIso,
+      dueDate,
+      dueTime,
     };
 
     onAddTask(newTask);
     closeModal();
   };
+
+  const timeRef = useRef<HTMLInputElement>(null);
 
   return (
     <div
@@ -104,7 +107,7 @@ const AddTaskModal = ({ onAddTask, closeModal }: AddTaskModalProps) => {
             <div className="modal-inline">
               <input
                 id="task-due-date"
-                type="datetime-local"
+                type="date"
                 className="modal-input"
                 value={dueDateLocal}
                 onChange={(e) => setDueDateLocal(e.target.value)}
@@ -123,8 +126,39 @@ const AddTaskModal = ({ onAddTask, closeModal }: AddTaskModalProps) => {
 
             {dueDateLocal && (
               <small className="modal-help">
-                Due: {new Date(dueDateLocal).toLocaleString()}
+                Due date: {new Date(dueDateLocal).toLocaleDateString()}
               </small>
+            )}
+          </div>
+
+          <div className="modal-field">
+            <label className="modal-label" htmlFor="task-due-time">
+              Due time (optional)
+            </label>
+
+            <div className="modal-inline">
+              <input
+                ref={timeRef}
+                id="task-due-time"
+                type="time"
+                className="modal-input"
+                value={dueTimeLocal}
+                onChange={(e) => setDueTimeLocal(e.target.value)}
+              />
+
+              <button
+                type="button"
+                className="modal-btn"
+                onClick={() => setDueTimeLocal("")}
+                disabled={!dueTimeLocal}
+                title="Clear due time"
+              >
+                Clear
+              </button>
+            </div>
+
+            {dueTimeLocal && (
+              <small className="modal-help">Due time: {dueTimeLocal}</small>
             )}
           </div>
 

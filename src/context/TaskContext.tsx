@@ -5,7 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { Task } from "../types/Task";
+import type { Task, StatusProp } from "../types/Task";
 import TaskList from "../data/TaskList";
 
 const TASKS_KEY = "sessionTasks";
@@ -17,9 +17,12 @@ type TaskContextType = {
   updateTask: (updatedTask: Task) => void;
   toggleCompleted: (id: number) => void;
   toggleImportant: (id: number) => void;
+  cycleStatus: (id: number) => void;
 };
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
+
+const statusOrder: StatusProp[] = ["New", "In Progress", "Completed"];
 
 function getStoredTasks(): Task[] {
   if (typeof window === "undefined") {
@@ -82,6 +85,24 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const cycleStatus = (id: number): void => {
+    setTasks((prev) =>
+      prev.map((task) => {
+        if (task.id !== id) return task;
+
+        const currentIndex = statusOrder.indexOf(task.status);
+        const nextIndex = (currentIndex + 1) % statusOrder.length;
+        const nextStatus = statusOrder[nextIndex];
+
+        return {
+          ...task,
+          status: nextStatus,
+          completed: nextStatus === "Completed",
+        };
+      }),
+    );
+  };
+
   return (
     <TaskContext.Provider
       value={{
@@ -91,6 +112,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         updateTask,
         toggleCompleted,
         toggleImportant,
+        cycleStatus,
       }}
     >
       {children}

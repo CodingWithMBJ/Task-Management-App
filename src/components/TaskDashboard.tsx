@@ -7,7 +7,7 @@ import EditTaskModal from "./EditTaskModal";
 import { useTaskContext } from "../context/TaskContext";
 
 const TaskDashboard: React.FC = () => {
-  const { tasks, addTask, deleteTask, updateTask, toggleCompleted } =
+  const { tasks, addTask, deleteTask, updateTask, cycleStatus } =
     useTaskContext();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -52,7 +52,7 @@ const TaskDashboard: React.FC = () => {
         tasks={tasks}
         onDeleteTask={deleteTask}
         onEditClick={(task) => setEditingTask(task)}
-        onToggleComplete={toggleCompleted}
+        onCycleStatus={cycleStatus}
       />
     </article>
   );

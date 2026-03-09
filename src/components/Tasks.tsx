@@ -8,14 +8,28 @@ type TasksProps = {
   tasks: Task[];
   onEditClick: (task: Task) => void;
   onDeleteTask: (id: number) => void;
-  onToggleComplete: (id: number) => void;
+  onCycleStatus: (id: number) => void;
+};
+
+const formatTime = (time?: string) => {
+  if (!time) return "";
+
+  const [hours, minutes] = time.split(":");
+  const hourNum = Number(hours);
+
+  if (Number.isNaN(hourNum)) return time;
+
+  const suffix = hourNum >= 12 ? "PM" : "AM";
+  const formattedHour = hourNum % 12 || 12;
+
+  return `${formattedHour}:${minutes} ${suffix}`;
 };
 
 const Tasks: React.FC<TasksProps> = ({
   tasks,
   onEditClick,
   onDeleteTask,
-  onToggleComplete,
+  onCycleStatus,
 }) => {
   return (
     <section className="task-items">
@@ -26,7 +40,6 @@ const Tasks: React.FC<TasksProps> = ({
           <article key={task.id} className="task-box">
             <section className="task-header">
               <article className="top">
-                {" "}
                 <h1 className="task-title">{task.title}</h1>
                 <p className="task-priority">
                   {task.important ? (
@@ -39,12 +52,18 @@ const Tasks: React.FC<TasksProps> = ({
                   )}
                 </p>
               </article>
+
               <article className="bottom">
-                <p className="task-description">{task.description}</p>{" "}
+                <p className="task-description">{task.description}</p>
                 <p className="task-date">
-                  {task.dueDate
-                    ? new Date(task.dueDate).toLocaleDateString()
-                    : "No due date"}
+                  {task.dueDate ? (
+                    <>
+                      {new Date(task.dueDate).toLocaleDateString()}
+                      {task.dueTime ? ` at ${formatTime(task.dueTime)}` : ""}
+                    </>
+                  ) : (
+                    "No due date"
+                  )}
                 </p>
               </article>
             </section>
@@ -52,23 +71,25 @@ const Tasks: React.FC<TasksProps> = ({
             <section className="task-body">
               <article className="task-body-l">
                 <button
-                  className={`task-completion ${task.completed ? "done" : ""}`}
-                  onClick={() => onToggleComplete(task.id)}
+                  className={`task-status status-${task.status
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`}
+                  onClick={() => onCycleStatus(task.id)}
                 >
-                  {task.completed ? "Completed" : "Not completed"}
+                  {task.status}
                 </button>
               </article>
 
               <article className="task-body-r">
                 <button
-                  className="edit-button"
+                  className="btn edit-button"
                   onClick={() => onEditClick(task)}
                 >
                   <FontAwesomeIcon icon={faEdit} />
                 </button>
 
                 <button
-                  className="delete-btn"
+                  className="btn delete-btn"
                   onClick={() => onDeleteTask(task.id)}
                 >
                   <FontAwesomeIcon icon={faTrash} />

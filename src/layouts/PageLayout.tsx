@@ -13,7 +13,11 @@ const PageLayout: React.FC = () => {
   return (
     <div className="wrapper max-h-screen w-screen flex-1 m-auto">
       {!isDesktop && <Header handleMenuToggle={handleMenuToggle} />}
-      <SideBar showMenu={showMenu} closeMenu={() => setShowMenu(false)} />
+      <SideBar
+        showMenu={showMenu}
+        closeMenu={() => setShowMenu(false)}
+        isDesktop={isDesktop}
+      />
 
       <main className="main">
         <Outlet />
