@@ -1,24 +1,15 @@
-import type { Dispatch, FormEvent, SetStateAction } from "react";
-
-export type ReqResUserData = {
-  id: number;
+export type AuthUser = {
+  name: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  avatar: string;
-};
-
-export type ReqResUserResponse = {
-  data: ReqResUserData;
+  picture: string;
+  sub: string;
 };
 
 export type AuthContextType = {
-  user: ReqResUserResponse | null;
-  email: string;
-  password: string;
-  token: string;
-  setEmail: Dispatch<SetStateAction<string>>;
-  setPassword: Dispatch<SetStateAction<string>>;
-  handleLogin: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+  user: AuthUser | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: () => Promise<void> | void;
+  signup: () => Promise<void> | void;
   logoutUser: () => void;
 };

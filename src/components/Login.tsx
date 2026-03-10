@@ -1,35 +1,41 @@
-import { useAuth } from "../context/AuthContext";
+import { useAuth0 } from "@auth0/auth0-react";
+// import { useAuth } from "../context/auth-context";
 
 const Login: React.FC = () => {
-  const { handleLogin, email, setEmail, password, setPassword } = useAuth();
+  const { loginWithRedirect } = useAuth0();
+
+  // if (isLoading) return <p>Loading...</p>;
 
   return (
-    <form onSubmit={handleLogin} className="login-form">
-      <h2>Log In</h2>
+    <section className="login-form">
+      <h2>Please Log In</h2>
+
       <div className="login-container">
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password: </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+        <button
+          type="button"
+          className="login-btn"
+          onClick={() => loginWithRedirect()}
+        >
+          Login
+        </button>
+
+        <button
+          type="button"
+          className="login-btn"
+          onClick={() =>
+            loginWithRedirect({
+              screen_hint: "signup",
+            })
+          }
+        >
+          Sign Up
+        </button>
+
+        {/* <button type="button" className="login-btn" onClick={signup}>
+          Create Account
+        </button> */}
       </div>
-      <button type="submit" className="login-btn">
-        Login
-      </button>
-    </form>
+    </section>
   );
 };
 
